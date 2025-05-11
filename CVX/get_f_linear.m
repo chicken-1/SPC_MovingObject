@@ -1,5 +1,5 @@
-function f = get_f_moving(img, pixel_size, v_ob, f_cam)
-
+function f = get_f_linear(img, pixel_size, v_ob, f_cam)
+%GET_F_LINEAR create a linearly moving object and take measurements
 f = img(:);
 
 ob_r_edge = 11; % the right edge of object is in the 11th column

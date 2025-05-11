@@ -1,9 +1,9 @@
+%% Simulating the capturing pictures process of single-pixels camera %%
 clc
 clear all
 close all
 
-
-% create an image with an object
+% Create an image with an square object 2.95 sparsity
 img = zeros(64, 64);
 for i = 30:40
     for j = 30:40
@@ -11,9 +11,11 @@ for i = 30:40
     end
 end
 
+% Parametter
 pixel_size = 0.1; %mm
-v_ob = 12; %mm/s object's velocity on screen
+v_ob = 4; %mm/s object's velocity on screen
 f_cam = 5000; % meas/s: taking measurements frequency of camera
+f_ob = 4;
 
 [sparsity, non_zeros] = cal_sparsity(img);
 % convex parameter
@@ -21,11 +23,8 @@ n = size(img, 1)*size(img, 2);
 m = 1500;
 
 snr_db = [30, 40, 50, 60];
-for j = 1:length(snr_db)
-% f_ob = 4;
-% f = get_f_oscillation(img, m, pixel_size, f_cam, f_ob);
-f = get_f_moving(img, pixel_size, v_ob, f_cam);
-% f = get_f_diagonal(img, pixel_size, v_ob, f_cam);
+for j = 1:length(snr_db);
+f = get_f_moving(1, img, pixel_size, v_ob, f_cam);
 
 A = get_A_random(n, m);
 
@@ -68,7 +67,7 @@ img_rec = reshape(xp, [size(img, 1) size(img, 2)]);
 figure(j), sgtitle(sprintf("snr = %d", snr_db(j)));
 subplot(1, 2, 1); imshow(uint8(img)); title('Object');
 subplot(1, 2, 2); imshow(uint8(img_rec)); title('Recovered result');
-saveas(gcf, sprintf("error/snr=%d,v=%d.jpg", snr_db(j), v_ob));
+% saveas(gcf, sprintf("error/snr=%d,v=%d.jpg", snr_db(j), v_ob));
 end
 % subplot(1, 3, 3); imshow(rgb_img_rec);
 % 
